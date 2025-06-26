@@ -1,0 +1,12 @@
+  [
+    {
+      "title": "Post A",
+      "body": "Body A",
+      "userId": 1
+    },
+    {
+      "title": "Post B",
+      "body": "Body B",
+      "userId": 2
+    }
+  ]

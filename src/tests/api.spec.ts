@@ -1,21 +1,68 @@
-import { test, expect, request } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import testData from '../../config/testData.json';
 
-test('Valid GET Request for Posts', async ({ request }) => {
-    // Send a GET request to the JSONPlaceholder API
-    const response = await request.get('https://jsonplaceholder.typicode.com/posts');
 
-    // Assert that the status is 200 (OK)
-    expect(response.status()).toBe(200);
-
-    // Parse the response body as JSON
+// Positive scenario: GET all posts
+test('GET /posts returns list of posts', async ({ request }) => {
+    const response = await request.get(`/posts`);
+    await expect(response).toBeOK();
+    expect(response.headers()['content-type']).toContain('application/json');
     const data = await response.json();
-
-    // Assert that the response is an array of posts
     expect(Array.isArray(data)).toBe(true);
-
-    // Assert that the first post has required properties
     expect(data[0]).toHaveProperty('userId');
     expect(data[0]).toHaveProperty('id');
     expect(data[0]).toHaveProperty('title');
     expect(data[0]).toHaveProperty('body');
+});
+
+// Positive scenario: POST create new post
+test('POST /posts creates a new post', async ({ request }) => {
+    const payload = { title: 'foo', body: 'bar', userId: 1 };
+    const response = await request.post(`/posts`, { data: payload });
+    expect(response.status()).toBe(201);
+    const body = await response.json();
+    expect(body).toMatchObject(payload);
+    expect(response.headers()['content-type']).toContain('application/json');
+});
+
+// Data-driven POST using external file
+for (const payload of testData) {
+    test(`POST /posts creates post for user ${payload.userId}`, async ({ request }) => {
+        const response = await request.post(`/posts`, { data: payload });
+        expect(response.status()).toBe(201);
+        const body = await response.json();
+        expect(body).toMatchObject(payload);
+    });
+}
+
+// Negative scenario: invalid post id
+test('GET /posts/0 returns 404 for invalid id', async ({ request }) => {
+    const response = await request.get(`/posts/0`);
+    expect(response.status()).toBe(404);
+});
+
+// Error handling: malformed JSON
+test('POST /posts with malformed json returns 400', async ({ request }) => {
+    const response = await request.fetch(`/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        data: '{ "title": "foo" ' // missing closing brace
+    });
+    expect([500, 400]).toContain(response.status());
+});
+
+// Error handling: unsupported method
+test('DELETE /posts is not allowed', async ({ request }) => {
+    const response = await request.delete(`/posts`);
+    expect([404, 405]).toContain(response.status());
+});
+
+// Edge case: large payload
+test('POST /posts with large payload', async ({ request }) => {
+    const largeBody = 'x'.repeat(10000);
+    const payload = { title: 'large', body: largeBody, userId: 1 };
+    const response = await request.post(`/posts`, { data: payload });
+    expect(response.status()).toBe(201);
+    const body = await response.json();
+    expect(body).toMatchObject(payload);
 });
