@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import testData from '../../config/testData.json';
+import { createPostAndVerify } from '../utils/apiUtils';
 
 
 // Positive scenario: GET all posts
@@ -18,20 +19,13 @@ test('GET /posts returns list of posts', async ({ request }) => {
 // Positive scenario: POST create new post
 test('POST /posts creates a new post', async ({ request }) => {
     const payload = { title: 'foo', body: 'bar', userId: 1 };
-    const response = await request.post(`/posts`, { data: payload });
-    expect(response.status()).toBe(201);
-    const body = await response.json();
-    expect(body).toMatchObject(payload);
-    expect(response.headers()['content-type']).toContain('application/json');
+    await createPostAndVerify(request, payload);
 });
 
 // Data-driven POST using external file
 for (const payload of testData) {
     test(`POST /posts creates post for user ${payload.userId}`, async ({ request }) => {
-        const response = await request.post(`/posts`, { data: payload });
-        expect(response.status()).toBe(201);
-        const body = await response.json();
-        expect(body).toMatchObject(payload);
+        await createPostAndVerify(request, payload);
     });
 }
 
@@ -61,8 +55,5 @@ test('DELETE /posts is not allowed', async ({ request }) => {
 test('POST /posts with large payload', async ({ request }) => {
     const largeBody = 'x'.repeat(10000);
     const payload = { title: 'large', body: largeBody, userId: 1 };
-    const response = await request.post(`/posts`, { data: payload });
-    expect(response.status()).toBe(201);
-    const body = await response.json();
-    expect(body).toMatchObject(payload);
+    await createPostAndVerify(request, payload);
 });
