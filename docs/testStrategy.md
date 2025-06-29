@@ -1,4 +1,4 @@
-﻿# Test Strategy
+﻿﻿# Test Strategy
 
 This project verifies the behavior of the JSONPlaceholder API by checking typical CRUD operations and error handling for each main route. The goal is to confirm that the service responds with the correct status codes and data formats.
 
@@ -10,9 +10,11 @@ This project verifies the behavior of the JSONPlaceholder API by checking typica
 - **Deletion (TC13, etc.)** – Confirm that deleting a resource yields a success status (200‑299).
 
 ## Negative scenarios
-- **Invalid identifiers (TC04, TC28, etc.)** – Requests with nonexistent IDs should return `404 Not Found`.
-- **Malformed JSON payloads (TC05, TC29, etc.)** – Posting invalid JSON should fail with status `400` or `500`.
-- **Unsupported methods 0(TC07, etc.)** – Certain endpoints reject unsupported HTTP methods, returning `404` or `405`.
+- **Invalid identifiers (TC04, TC30, etc.)** – Requests with nonexistent IDs should return `404 Not Found`.
+- **Malformed JSON payloads (TC05, TC31, etc.)** – Posting invalid JSON should fail with status `400` or `500`.
+- **Unsupported methods (TC06, etc.)** – Certain endpoints reject unsupported HTTP methods, returning `404` or `405`.
+- **Missing required fields (TC08, TC33, etc.)** – Omitting mandatory properties in POST requests should return an error status.
+- **Wrong content type (TC09, TC34, etc.)** – Sending payloads with an unexpected `Content-Type` should also fail with status `400`‑`500`.
 
 ## Edge cases
 - **Large payloads (TC06, TC30, etc.)** – Verify that the API accepts unusually large bodies and echoes them back.
