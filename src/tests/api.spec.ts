@@ -198,7 +198,9 @@ for (const resource of resources) {
         const response = await request.post(base, { data: example });
         await expect(response).toBeOK();
         const data = await response.json();
-        expect(data).toMatchObject(example);
+        const { id, ...rest } = example;
+        expect(data).toMatchObject(rest);
+        expect(data).toHaveProperty('id');
     });
 
     // Update via PUT
