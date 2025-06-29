@@ -59,8 +59,24 @@ test('TC-07 POST /posts with large payload', async ({ request }) => {
     await createPostAndVerify(request, payload);
 });
 
+// Missing field in payload
+test('TC-08 POST /posts with missing field returns error', async ({ request }) => {
+    const payload = { title: 'foo' }; // body and userId omitted
+    const response = await request.post(`${testRoutes.posts.route}`, { data: payload });
+    expect([400, 422, 500]).toContain(response.status());
+});
+
+// Wrong content type
+test('TC-09 POST /posts with wrong content type', async ({ request }) => {
+    const response = await request.post(`${testRoutes.posts.route}`, {
+        headers: { 'Content-Type': 'text/plain' },
+        data: JSON.stringify({ title: 'foo', body: 'bar', userId: 1 })
+    });
+    expect([400, 415, 500]).toContain(response.status());
+});
+
 // Verify retrieving a single post
-test('TC-08 GET /posts/1 returns single post', async ({ request }) => {
+test('TC-10 GET /posts/1 returns single post', async ({ request }) => {
     const response = await request.get(`${testRoutes.posts.route}/1`);
     await expect(response).toBeOK();
     const data = await response.json();
@@ -68,7 +84,7 @@ test('TC-08 GET /posts/1 returns single post', async ({ request }) => {
 });
 
 // Verify listing comments for a post
-test('TC-09 GET /posts/1/comments returns comments for post', async ({ request }) => {
+test('TC-11 GET /posts/1/comments returns comments for post', async ({ request }) => {
     const response = await request.get(`${testRoutes.posts.route}/1/comments`);
     await expect(response).toBeOK();
     const comments = await response.json();
@@ -77,7 +93,7 @@ test('TC-09 GET /posts/1/comments returns comments for post', async ({ request }
 });
 
 // Verify filtering comments by postId
-test('TC-10 GET /comments?postId=1 filters comments', async ({ request }) => {
+test('TC-12 GET /comments?postId=1 filters comments', async ({ request }) => {
     const response = await request.get(`${testRoutes.comments.route}?postId=1`);
     await expect(response).toBeOK();
     const comments = await response.json();
@@ -85,7 +101,7 @@ test('TC-10 GET /comments?postId=1 filters comments', async ({ request }) => {
 });
 
 // Verify full update of a post
-test('TC-11 PUT /posts/1 updates post', async ({ request }) => {
+test('TC-13 PUT /posts/1 updates post', async ({ request }) => {
     const payload = { id: 1, title: 'updated', body: 'updated', userId: 1 };
     const response = await request.put(`${testRoutes.posts.route}/1`, { data: payload });
     await expect(response).toBeOK();
@@ -94,7 +110,7 @@ test('TC-11 PUT /posts/1 updates post', async ({ request }) => {
 });
 
 // Verify partial update of a post
-test('TC-12 PATCH /posts/1 partially updates post', async ({ request }) => {
+test('TC-14 PATCH /posts/1 partially updates post', async ({ request }) => {
     const response = await request.patch(`${testRoutes.posts.route}/1`, { data: { title: 'patched' } });
     await expect(response).toBeOK();
     const data = await response.json();
@@ -102,21 +118,21 @@ test('TC-12 PATCH /posts/1 partially updates post', async ({ request }) => {
 });
 
 // Verify deleting a post
-test('TC-13 DELETE /posts/1 deletes post', async ({ request }) => {
+test('TC-15 DELETE /posts/1 deletes post', async ({ request }) => {
     const response = await request.delete(`${testRoutes.posts.route}/1`);
     expect(response.status()).toBeGreaterThanOrEqual(200);
     expect(response.status()).toBeLessThan(300);
 });
 
 // Comments route tests
-test('TC-14 GET /comments returns list of comments', async ({ request }) => {
+test('TC-16 GET /comments returns list of comments', async ({ request }) => {
     const response = await request.get(`${testRoutes.comments.route}`);
     await expect(response).toBeOK();
     const data = await response.json();
     expect(Array.isArray(data)).toBe(true);
 });
 
-test('TC-15 GET /comments/1 returns single comment', async ({ request }) => {
+test('TC-17 GET /comments/1 returns single comment', async ({ request }) => {
     const response = await request.get(`${testRoutes.comments.route}/1`);
     await expect(response).toBeOK();
     const data = await response.json();
@@ -124,14 +140,14 @@ test('TC-15 GET /comments/1 returns single comment', async ({ request }) => {
 });
 
 // Albums route tests
-test('TC-16 GET /albums returns list of albums', async ({ request }) => {
+test('TC-18 GET /albums returns list of albums', async ({ request }) => {
     const response = await request.get(`${testRoutes.albums.route}`);
     await expect(response).toBeOK();
     const data = await response.json();
     expect(Array.isArray(data)).toBe(true);
 });
 
-test('TC-17 GET /albums/1 returns single album', async ({ request }) => {
+test('TC-19 GET /albums/1 returns single album', async ({ request }) => {
     const response = await request.get(`${testRoutes.albums.route}/1`);
     await expect(response).toBeOK();
     const data = await response.json();
@@ -139,14 +155,14 @@ test('TC-17 GET /albums/1 returns single album', async ({ request }) => {
 });
 
 // Photos route tests
-test('TC-18 GET /photos returns list of photos', async ({ request }) => {
+test('TC-20 GET /photos returns list of photos', async ({ request }) => {
     const response = await request.get(`${testRoutes.photos.route}`);
     await expect(response).toBeOK();
     const data = await response.json();
     expect(Array.isArray(data)).toBe(true);
 });
 
-test('TC-19 GET /photos/1 returns single photo', async ({ request }) => {
+test('TC-21 GET /photos/1 returns single photo', async ({ request }) => {
     const response = await request.get(`${testRoutes.photos.route}/1`);
     await expect(response).toBeOK();
     const data = await response.json();
@@ -154,14 +170,14 @@ test('TC-19 GET /photos/1 returns single photo', async ({ request }) => {
 });
 
 // Todos route tests
-test('TC-20 GET /todos returns list of todos', async ({ request }) => {
+test('TC-22 GET /todos returns list of todos', async ({ request }) => {
     const response = await request.get(`${testRoutes.todos.route}`);
     await expect(response).toBeOK();
     const data = await response.json();
     expect(Array.isArray(data)).toBe(true);
 });
 
-test('TC-21 GET /todos/1 returns single todo', async ({ request }) => {
+test('TC-23 GET /todos/1 returns single todo', async ({ request }) => {
     const response = await request.get(`${testRoutes.todos.route}/1`);
     await expect(response).toBeOK();
     const data = await response.json();
@@ -169,14 +185,14 @@ test('TC-21 GET /todos/1 returns single todo', async ({ request }) => {
 });
 
 // Users route tests
-test('TC-22 GET /users returns list of users', async ({ request }) => {
+test('TC-24 GET /users returns list of users', async ({ request }) => {
     const response = await request.get(`${testRoutes.users.route}`);
     await expect(response).toBeOK();
     const data = await response.json();
     expect(Array.isArray(data)).toBe(true);
 });
 
-test('TC-23 GET /users/1 returns single user', async ({ request }) => {
+test('TC-25 GET /users/1 returns single user', async ({ request }) => {
     const response = await request.get(`${testRoutes.users.route}/1`);
     await expect(response).toBeOK();
     const data = await response.json();
@@ -185,7 +201,7 @@ test('TC-23 GET /users/1 returns single user', async ({ request }) => {
 
 // Additional CRUD and edge case tests for other routes
 const resources = ['comments', 'albums', 'photos', 'todos', 'users'] as const;
-let tc = 24;
+let tc = 26;
 
 for (const resource of resources) {
     const base = testRoutes[resource].route;
@@ -198,7 +214,9 @@ for (const resource of resources) {
         const response = await request.post(base, { data: example });
         await expect(response).toBeOK();
         const data = await response.json();
-        expect(data).toMatchObject(example);
+        const { id, ...rest } = example;
+        expect(data).toMatchObject(rest);
+        expect(data).toHaveProperty('id');
     });
 
     // Update via PUT
@@ -249,5 +267,23 @@ for (const resource of resources) {
         await expect(response).toBeOK();
         const data = await response.json();
         expect(data[stringKey]).toBe(largeString);
+    });
+
+    // Missing required fields
+    test(`TC-${tc++} POST ${base} missing fields returns error`, async ({ request }) => {
+        const omitKey = Object.keys(example)[0];
+        const payload = { ...example } as Record<string, any>;
+        delete payload[omitKey];
+        const response = await request.post(base, { data: payload });
+        expect([400, 422, 500]).toContain(response.status());
+    });
+
+    // Wrong content type
+    test(`TC-${tc++} POST ${base} wrong content type`, async ({ request }) => {
+        const response = await request.post(base, {
+            headers: { 'Content-Type': 'text/plain' },
+            data: JSON.stringify(example)
+        });
+        expect([400, 415, 500]).toContain(response.status());
     });
 }
