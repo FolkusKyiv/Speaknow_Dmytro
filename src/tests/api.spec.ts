@@ -4,7 +4,7 @@ import { createPostAndVerify } from '../utils/apiUtils';
 
 
 // Positive scenario: GET all posts
-test('GET /posts returns list of posts', async ({ request }) => {
+test('TC-01 GET /posts returns list of posts', async ({ request }) => {
     const response = await request.get(`/posts`);
     await expect(response).toBeOK();
     expect(response.headers()['content-type']).toContain('application/json');
@@ -17,26 +17,26 @@ test('GET /posts returns list of posts', async ({ request }) => {
 });
 
 // Positive scenario: POST create new post
-test('POST /posts creates a new post', async ({ request }) => {
+test('TC-02 POST /posts creates a new post', async ({ request }) => {
     const payload = { title: 'foo', body: 'bar', userId: 1 };
     await createPostAndVerify(request, payload);
 });
 
 // Data-driven POST using external file
 for (const payload of testData) {
-    test(`POST /posts creates post for user ${payload.userId}`, async ({ request }) => {
+    test(`TC-03 POST /posts creates post for user ${payload.userId}`, async ({ request }) => {
         await createPostAndVerify(request, payload);
     });
 }
 
 // Negative scenario: invalid post id
-test('GET /posts/0 returns 404 for invalid id', async ({ request }) => {
+test('TC-04 GET /posts/0 returns 404 for invalid id', async ({ request }) => {
     const response = await request.get(`/posts/0`);
     expect(response.status()).toBe(404);
 });
 
 // Error handling: malformed JSON
-test('POST /posts with malformed json returns 400', async ({ request }) => {
+test('TC-05 POST /posts with malformed json returns 400', async ({ request }) => {
     const response = await request.fetch(`/posts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -46,7 +46,7 @@ test('POST /posts with malformed json returns 400', async ({ request }) => {
 });
 
 // Error handling: unsupported method
-test('DELETE /posts is not allowed', async ({ request }) => {
+test('TC-06 DELETE /posts is not allowed', async ({ request }) => {
     const response = await request.delete(`/posts`);
     expect([404, 405]).toContain(response.status());
 });
