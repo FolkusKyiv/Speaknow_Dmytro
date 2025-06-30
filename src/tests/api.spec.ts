@@ -199,6 +199,15 @@ test('TC-25 GET /users/1 returns single user', async ({ request }) => {
     expect(data).toHaveProperty('id', 1);
 });
 
+// Negative scenario: binary data should not be accepted
+test('TC-26 POST /posts with binary data returns error', async ({ request }) => {
+    const response = await request.post(`${testRoutes.posts.route}`, {
+        headers: { 'Content-Type': 'application/octet-stream' },
+        data: Buffer.from([0x89, 0x50, 0x4E, 0x47])
+    });
+    expect([400, 415, 500]).toContain(response.status());
+});
+
 // Additional CRUD and edge case tests for other routes
 const resources = ['comments', 'albums', 'photos', 'todos', 'users'] as const;
 let tc = 26;
