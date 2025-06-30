@@ -13,8 +13,7 @@ The tests cover the following main routes:
 - `/users` 
 
 Test cases are utilizing supported HTTP methods: `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`.
-The Playwright specifications are grouped by method (`get.spec.ts`, `post.spec.ts`, etc.) for easier maintenance.
-
+The Playwright specifications are grouped by method (`get.spec.ts`, `post.spec.ts`, etc.) for easier maintenance. The test script also supports filtering by API route using the `/route` syntax.
 ### Specifics:
 - For `GET` requests, both `{resource}` and `/{resource}/{id}` endpoints are tested.
 - Nested relationships are covered as well. Tests check `/posts/{id}/comments`,
