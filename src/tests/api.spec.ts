@@ -200,7 +200,7 @@ test('TC-25 GET /users/1 returns single user', async ({ request }) => {
 });
 
 // Negative scenario: binary data should not be accepted
-test.only('TC-26 POST /posts with binary data returns error', async ({ request }) => {
+test('TC-26 POST /posts with binary data returns error', async ({ request }) => {
     const response = await request.post(`${testRoutes.posts.route}`, {
         headers: { 'Content-Type': 'application/octet-stream' },
         data: Buffer.from([0x89, 0x50, 0x4E, 0x47])
