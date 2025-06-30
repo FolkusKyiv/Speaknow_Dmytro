@@ -73,3 +73,12 @@
 | TC69 - Large User Payload | Verify POST `/users` handles large payload. | API is reachable | 1. Send POST request to `/users` with very large field | Status 201 and echoed payload |
 | TC70 - Missing User Field | Verify POST `/users` with missing field fails. | API is reachable | 1. Send POST to `/users` omitting a property | Status 400-500 |
 | TC71 - Wrong User Content Type | Verify POST `/users` with wrong content type fails. | API is reachable | 1. Send POST to `/users` with `Content-Type: text/plain` | Status 400-500 |
+| TC72 - List Album Photos | Verify GET `/albums/1/photos` returns photos for an album. | API is reachable | 1. Send GET request to `/albums/1/photos` | Status 200 and array with `albumId` 1 |
+| TC73 - Invalid Album Photos | Verify GET `/albums/0/photos` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/albums/0/photos` | Status 404 |
+| TC74 - List User Albums | Verify GET `/users/1/albums` returns albums for a user. | API is reachable | 1. Send GET request to `/users/1/albums` | Status 200 and array with `userId` 1 |
+| TC75 - Invalid User Albums | Verify GET `/users/0/albums` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/users/0/albums` | Status 404 |
+| TC76 - List User Todos | Verify GET `/users/1/todos` returns todos for a user. | API is reachable | 1. Send GET request to `/users/1/todos` | Status 200 and array with `userId` 1 |
+| TC77 - Invalid User Todos | Verify GET `/users/0/todos` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/users/0/todos` | Status 404 |
+| TC78 - List User Posts | Verify GET `/users/1/posts` returns posts for a user. | API is reachable | 1. Send GET request to `/users/1/posts` | Status 200 and array with `userId` 1 |
+| TC79 - Invalid User Posts | Verify GET `/users/0/posts` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/users/0/posts` | Status 404 |
+| TC80 - Invalid Post Comments | Verify GET `/posts/0/comments` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/posts/0/comments` | Status 404 |
