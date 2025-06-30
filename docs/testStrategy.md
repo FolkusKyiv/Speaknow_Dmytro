@@ -4,7 +4,7 @@ This project verifies the behavior of the JSONPlaceholder API by checking typica
 The goal is to confirm that the service responds with the correct status codes and data formats.
 
 ## Test Scope
-The tests cover the following main routes: 
+The tests cover the following main routes:
 - `/posts`	
 - `/comments`	
 - `/albums`	
@@ -13,6 +13,7 @@ The tests cover the following main routes:
 - `/users` 
 
 Test cases are utilizing supported HTTP methods: `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`.
+The Playwright specifications are grouped by method (`get.spec.ts`, `post.spec.ts`, etc.) for easier maintenance.
 ### Specifics:
 - For `GET` requests, both `{resource}` and `/{resource}/{id}` endpoints are tested.
 - Nested relationships are covered as well. Tests check `/posts/{id}/comments`,
