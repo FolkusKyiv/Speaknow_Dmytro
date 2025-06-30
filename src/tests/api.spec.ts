@@ -296,3 +296,134 @@ for (const resource of resources) {
         expect([400, 415, 500]).toContain(response.status());
     });
 }
+
+// Nested resource tests
+test('TC-72 GET /albums/1/photos returns album photos', async ({ request }) => {
+    const response = await request.get(`${testRoutes.albums.route}/1/photos`);
+    await expect(response).toBeOK();
+    const photos = await response.json();
+    expect(Array.isArray(photos)).toBe(true);
+    expect(photos[0]).toHaveProperty('albumId', 1);
+});
+
+test('TC-73 GET /albums/0/photos returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.albums.route}/0/photos`);
+    const status = response.status();
+
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+test('TC-74 GET /users/1/albums returns user albums', async ({ request }) => {
+    const response = await request.get(`${testRoutes.users.route}/1/albums`);
+    await expect(response).toBeOK();
+    const albums = await response.json();
+    expect(Array.isArray(albums)).toBe(true);
+    expect(albums[0]).toHaveProperty('userId', 1);
+});
+
+test('TC-75 GET /users/0/albums returns 404 or and empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.users.route}/0/albums`);
+    const status = response.status();
+
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+test('TC-76 GET /users/1/todos returns user todos', async ({ request }) => {
+    const response = await request.get(`${testRoutes.users.route}/1/todos`);
+    await expect(response).toBeOK();
+    const todos = await response.json();
+    expect(Array.isArray(todos)).toBe(true);
+    expect(todos[0]).toHaveProperty('userId', 1);
+});
+
+test('TC-77 GET /users/0/todos returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.users.route}/0/todos`);
+    const status = response.status();
+
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+test('TC-78 GET /users/1/posts returns user posts', async ({ request }) => {
+    const response = await request.get(`${testRoutes.users.route}/1/posts`);
+    await expect(response).toBeOK();
+    const posts = await response.json();
+    expect(Array.isArray(posts)).toBe(true);
+    expect(posts[0]).toHaveProperty('userId', 1);
+});
+
+test('TC-79 GET /users/0/posts returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.users.route}/0/posts`);
+    const status = response.status();
+
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+test('TC-80 GET /posts/0/comments returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.posts.route}/0/comments`);
+    const status = response.status();
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+// Unsupported nested routes
+test('TC-81 GET /posts/1/albums returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.posts.route}/1/albums`);
+    const status = response.status();
+
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+test('TC-82 GET /comments/1/posts returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.comments.route}/1/posts`);
+    const status = response.status();
+
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
