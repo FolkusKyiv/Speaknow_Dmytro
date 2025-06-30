@@ -14,6 +14,7 @@ The tests cover the following main routes:
 
 Test cases are utilizing supported HTTP methods: `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`.
 The Playwright specifications are grouped by method (`get.spec.ts`, `post.spec.ts`, etc.) for easier maintenance.
+
 ### Specifics:
 - For `GET` requests, both `{resource}` and `/{resource}/{id}` endpoints are tested.
 - Nested relationships are covered as well. Tests check `/posts/{id}/comments`,
@@ -23,6 +24,11 @@ The Playwright specifications are grouped by method (`get.spec.ts`, `post.spec.t
   an empty array.
 
 Testing includes both positive and negative scenarios, as well as edge cases.
+
+## Prerequisites
+- The API must be reachable at `https://jsonplaceholder.typicode.com`.
+- `testData.json` contains predefined payloads for some tests.
+- `testRoutes.json` lists all API endpoints with example data used in the tests.
 
 ## Positive scenarios
 - **Listing resources (TC01, TC14, etc.)** – Ensure that `GET` requests return an array of objects with `application/json` content.
