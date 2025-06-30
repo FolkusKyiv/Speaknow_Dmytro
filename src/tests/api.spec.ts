@@ -389,6 +389,34 @@ test('TC-79 GET /users/0/posts returns 404 or an empty array', async ({ request 
 test('TC-80 GET /posts/0/comments returns 404 or an empty array', async ({ request }) => {
     const response = await request.get(`${testRoutes.posts.route}/0/comments`);
     const status = response.status();
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+// Unsupported nested routes
+test('TC-81 GET /posts/1/albums returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.posts.route}/1/albums`);
+    const status = response.status();
+
+    if (status === 404) {
+        expect(status).toBe(404);
+    } else {
+        expect(status).toBe(200);
+        const body = await response.json();
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(0);
+    }
+});
+
+test('TC-82 GET /comments/1/posts returns 404 or an empty array', async ({ request }) => {
+    const response = await request.get(`${testRoutes.comments.route}/1/posts`);
+    const status = response.status();
 
     if (status === 404) {
         expect(status).toBe(404);

@@ -82,3 +82,5 @@
 | TC78 - List User Posts | Verify GET `/users/1/posts` returns posts for a user. | API is reachable | 1. Send GET request to `/users/1/posts` | Status 200 and array with `userId` 1 |
 | TC79 - Invalid User Posts | Verify GET `/users/0/posts` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/users/0/posts` | Status 404 |
 | TC80 - Invalid Post Comments | Verify GET `/posts/0/comments` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/posts/0/comments` | Status 404 |
+| TC81 - Unsupported Posts Albums | Verify GET `/posts/1/albums` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/posts/1/albums` | Status 404 or 200 with empty array |
+| TC82 - Unsupported Comments Posts | Verify GET `/comments/1/posts` returns 404 or an empty array. | API is reachable | 1. Send GET request to `/comments/1/posts` | Status 404 or 200 with empty array |

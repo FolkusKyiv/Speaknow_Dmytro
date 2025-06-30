@@ -17,7 +17,9 @@ Test cases are utilizing supported HTTP methods: `GET`, `POST`, `PUT`, `PATCH`, 
 - For `GET` requests, both `{resource}` and `/{resource}/{id}` endpoints are tested.
 - Nested relationships are covered as well. Tests check `/posts/{id}/comments`,
   `/albums/{id}/photos`, `/users/{id}/albums`, `/users/{id}/todos`, and
-  `/users/{id}/posts` with both valid and invalid identifiers.
+  `/users/{id}/posts` with both valid and invalid identifiers. Additional tests
+  verify unsupported nested paths to ensure they respond with a `404` status or
+  an empty array.
 
 Testing includes both positive and negative scenarios, as well as edge cases.
 
@@ -36,8 +38,9 @@ Testing includes both positive and negative scenarios, as well as edge cases.
 - **Missing required fields (TC08, TC33, etc.)** – Omitting mandatory properties in POST requests should return an error status.
 - **Wrong content type (TC09, TC34, etc.)** – Sending payloads with an unexpected `Content-Type` should also fail with status `400`‑`500`.
 - **Binary data (TC26)** – Posting file-like content such as `application/octet-stream` should be rejected.
-- **Invalid nested resources (TC73, TC75, etc** – Accessing nested relations with invalid parents
-  (e.g. `/posts/0/comments`) should also result in a `404` or an empty array.
+- **Invalid nested resources (TC73, TC75, etc.)** – Accessing nested relations
+  with invalid parents (e.g. `/posts/0/comments`) or unsupported paths
+  (e.g. `/posts/1/albums`) should result in a `404` status or an empty array.
 
 ## Edge cases
 - **Large payloads (TC06, TC30, etc.)** – Verify that the API accepts unusually large bodies and echoes them back.
