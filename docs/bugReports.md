@@ -1,7 +1,7 @@
 # Found bugs
 
 ## Bug-01 
-- **Summary**: The api successfuly returns POST 201, if the request body is not complete 
+- **Summary**: The api successfuly returns POST 201, if the content type request header is of a wrong value
 - **Priority**: **High** (Reasoning: there is no strict validation of the content type send in the request header, which can lead to unexpected behavior and security vulnerabilities)
 - **Description**: Applicable for all routes! There is no strict validation of the content type sent in the request header, which can lead to unexpected behavior and security vulnerabilities. 		
  For example, if a request is sent with a content type of "text/plain" instead of "application/json", the API should return a 400 Bad Request error instead of a 201 Created response. 
